@@ -20,7 +20,8 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
     var selectedHour by remember { mutableStateOf("") }
     var dayExpanded by remember { mutableStateOf(false) }
     var hourExpanded by remember { mutableStateOf(false) }
-    val daysOfWeek = listOf("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    val daysOfWeek = listOf("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo")
     val hours = (0..23).map { "${it.toString().padStart(2, '0')}:00" }
 
     val db = FirebaseFirestore.getInstance()
@@ -108,6 +109,16 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
             }
         }
 
+        // Display error message if any
+        errorMessage?.let {
+            Text(
+                text = it,
+                color = Color.Red,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+        }
+
         // Action buttons
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -117,22 +128,36 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
                 Text("Cancelar")
             }
             Button(onClick = {
-                // Calculate end time
-                val startHour = selectedHour.split(":")[0].toInt()
-                val endHour = (startHour + 1).toString().padStart(2, '0') + ":00"
-                val classData = hashMapOf(
-                    "subject" to subject,
-                    "day" to selectedDay,
-                    "startHour" to selectedHour,
-                    "endHour" to endHour
-                )
+                // Check if a class already exists for the selected day and hour
                 db.collection("classes")
-                    .add(classData)
-                    .addOnSuccessListener {
-                        onNavigate("mainScreen")
+                    .whereEqualTo("day", selectedDay)
+                    .whereEqualTo("startHour", selectedHour)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        if (result.isEmpty) {
+                            // Calculate end time
+                            val startHour = selectedHour.split(":")[0].toInt()
+                            val endHour = (startHour + 1).toString().padStart(2, '0') + ":00"
+                            val classData = hashMapOf(
+                                "subject" to subject,
+                                "day" to selectedDay,
+                                "startHour" to selectedHour,
+                                "endHour" to endHour
+                            )
+                            db.collection("classes")
+                                .add(classData)
+                                .addOnSuccessListener {
+                                    onNavigate("mainScreen")
+                                }
+                                .addOnFailureListener { e ->
+                                    errorMessage = "Error al añadir la clase: ${e.message}"
+                                }
+                        } else {
+                            errorMessage = "Ya existe una clase a esa hora el mismo día."
+                        }
                     }
                     .addOnFailureListener { e ->
-                        // Handle the error
+                        errorMessage = "Error al comprobar la clase: ${e.message}"
                     }
             }) {
                 Text("Añadir")
