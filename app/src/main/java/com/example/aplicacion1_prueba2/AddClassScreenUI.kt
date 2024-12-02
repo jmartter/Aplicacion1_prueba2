@@ -18,13 +18,10 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
     var subject by remember { mutableStateOf("") }
     var selectedDay by remember { mutableStateOf("") }
     var selectedHour by remember { mutableStateOf("") }
-    var selectedMinute by remember { mutableStateOf("") }
     var dayExpanded by remember { mutableStateOf(false) }
     var hourExpanded by remember { mutableStateOf(false) }
-    var minuteExpanded by remember { mutableStateOf(false) }
-    val daysOfWeek = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
-    val hours = (0..23).map { it.toString().padStart(2, '0') }
-    val minutes = listOf("00", "15", "30", "45")
+    val daysOfWeek = listOf("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
+    val hours = (0..23).map { "${it.toString().padStart(2, '0')}:00" }
 
     val db = FirebaseFirestore.getInstance()
 
@@ -86,54 +83,26 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
         }
 
         // Dropdown button for hour
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(0.9f) // Ancho al 90%
-                .padding(bottom = 32.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Box(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
-                Button(onClick = { hourExpanded = true }, modifier = Modifier.fillMaxWidth()) {
-                    Text(if (selectedHour.isEmpty()) "HH" else selectedHour)
-                }
-                DropdownMenu(
-                    expanded = hourExpanded,
-                    onDismissRequest = { hourExpanded = false },
-                    modifier = Modifier.heightIn(max = 200.dp) // Altura fija
-                ) {
-                    Column {
-                        hours.forEach { hour ->
-                            DropdownMenuItem(
-                                text = { Text(text = hour) },
-                                onClick = {
-                                    selectedHour = hour
-                                    hourExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
+        Box(modifier = Modifier
+            .fillMaxWidth(0.9f) // Ancho al 90%
+            .padding(bottom = 32.dp)) {
+            Button(onClick = { hourExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+                Text(if (selectedHour.isEmpty()) "Seleccionar hora" else selectedHour)
             }
-
-            Box(modifier = Modifier.weight(1f).padding(start = 8.dp)) {
-                Button(onClick = { minuteExpanded = true }, modifier = Modifier.fillMaxWidth()) {
-                    Text(if (selectedMinute.isEmpty()) "MM" else selectedMinute)
-                }
-                DropdownMenu(
-                    expanded = minuteExpanded,
-                    onDismissRequest = { minuteExpanded = false },
-                    modifier = Modifier.heightIn(max = 200.dp) // Altura fija
-                ) {
-                    Column {
-                        minutes.forEach { minute ->
-                            DropdownMenuItem(
-                                text = { Text(text = minute) },
-                                onClick = {
-                                    selectedMinute = minute
-                                    minuteExpanded = false
-                                }
-                            )
-                        }
+            DropdownMenu(
+                expanded = hourExpanded,
+                onDismissRequest = { hourExpanded = false },
+                modifier = Modifier.heightIn(max = 200.dp) // Altura fija
+            ) {
+                Column {
+                    hours.forEach { hour ->
+                        DropdownMenuItem(
+                            text = { Text(text = hour) },
+                            onClick = {
+                                selectedHour = hour
+                                hourExpanded = false
+                            }
+                        )
                     }
                 }
             }
@@ -148,12 +117,14 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
                 Text("Cancelar")
             }
             Button(onClick = {
-                // Add logic to add the class to the schedule
+                // Calculate end time
+                val startHour = selectedHour.split(":")[0].toInt()
+                val endHour = (startHour + 1).toString().padStart(2, '0') + ":00"
                 val classData = hashMapOf(
                     "subject" to subject,
                     "day" to selectedDay,
-                    "hour" to selectedHour,
-                    "minute" to selectedMinute
+                    "startHour" to selectedHour,
+                    "endHour" to endHour
                 )
                 db.collection("classes")
                     .add(classData)

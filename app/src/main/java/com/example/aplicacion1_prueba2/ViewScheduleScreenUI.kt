@@ -18,7 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot
 fun ViewScheduleScreenUI() {
     var selectedDay by remember { mutableStateOf("") }
     var dayExpanded by remember { mutableStateOf(false) }
-    val daysOfWeek = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
+    val daysOfWeek = listOf("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
     val db = FirebaseFirestore.getInstance()
     var subjects by remember { mutableStateOf<List<Map<String, Any>>>(emptyList()) }
 
