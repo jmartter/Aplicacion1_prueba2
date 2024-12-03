@@ -12,25 +12,25 @@ El código fuente de la aplicación se encuentra en el siguiente repositorio de 
 
 La pantalla principal (`MainScreenUI`) es el punto de entrada de la aplicación. Desde aquí, los usuarios pueden navegar a las diferentes funcionalidades de la aplicación.
 
-<img src="app/src/main/res/drawable/pantalla1.png" alt="Pantalla Principal" width="300"/>
+<img src="app/src/main/res/drawable/pantalla1.png" alt="Pantalla Principal" width="200"/>
 
 ### Añadir Clase
 
 La pantalla de añadir clase (`AddClassScreenUI`) permite a los usuarios agregar una nueva clase a su horario. Los usuarios pueden seleccionar la asignatura, el día de la semana y la hora de inicio de la clase.
 
-<img src="app/src/main/res/drawable/pantalla2.png" alt="Añadir Clase" width="300"/>
+<img src="app/src/main/res/drawable/pantalla2.png" alt="Añadir Clase" width="200"/>
 
 ### Ver Horario
 
 La pantalla de ver horario (`ViewScheduleScreenUI`) muestra el horario completo del usuario. Los usuarios pueden seleccionar un día de la semana para ver las clases programadas para ese día.
 
-<img src="app/src/main/res/drawable/pantalla3.png" alt="Ver Horario" width="300"/>
+<img src="app/src/main/res/drawable/pantalla3.png" alt="Ver Horario" width="200"/>
 
 ### ¿Qué Toca Ahora?
 
 La pantalla de ¿Qué toca ahora? (`CurrentClassScreenUI`) muestra la clase actual del usuario basada en el día y la hora actuales. Si no hay ninguna clase registrada para el momento actual, se muestra un mensaje indicando que no hay clases.
 
-<img src="app/src/main/res/drawable/pantalla4.png" alt="¿Qué Toca Ahora?" width="300"/>
+<img src="app/src/main/res/drawable/pantalla4.png" alt="¿Qué Toca Ahora?" width="200"/>
 
 ### Firebase Firestore
 
