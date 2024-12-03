@@ -1,4 +1,4 @@
-package com.example.aplicacion1_prueba2
+package com.example.aplicacion1_prueba2.Pantalla3
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -30,7 +30,7 @@ fun ViewScheduleScreenUI() {
                 subjects = result.documents.map { it.data ?: emptyMap() }
             }
             .addOnFailureListener { exception ->
-                // Handle the error
+
             }
     }
 

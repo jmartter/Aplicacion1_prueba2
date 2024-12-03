@@ -14,8 +14,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.aplicacion1_prueba2.Pantalla1.MainScreenUI
+import com.example.aplicacion1_prueba2.Pantalla2.AddClassScreenUI
+import com.example.aplicacion1_prueba2.Pantalla3.ViewScheduleScreenUI
+import com.example.aplicacion1_prueba2.Pantalla4.CurrentClassScreenUI
 import com.example.aplicacion1_prueba2.ui.theme.Aplicacion1_prueba2Theme
-import com.example.aplicacion1_prueba2.ui.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

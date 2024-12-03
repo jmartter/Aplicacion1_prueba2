@@ -1,4 +1,4 @@
-package com.example.aplicacion1_prueba2
+package com.example.aplicacion1_prueba2.Pantalla4
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
