@@ -2,11 +2,14 @@ package com.example.aplicacion1_prueba2.Pantalla2
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -20,7 +23,7 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
     var dayExpanded by remember { mutableStateOf(false) }
     var hourExpanded by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    val daysOfWeek = listOf("lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo")
+    val daysOfWeek = listOf("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
     val hours = (0..23).map { "${it.toString().padStart(2, '0')}:00" }
 
     val db = FirebaseFirestore.getInstance()
@@ -63,8 +66,14 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
         Box(modifier = Modifier
             .fillMaxWidth(0.9f) // Ancho al 90%
             .padding(bottom = 16.dp)) {
-            Button(onClick = { dayExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { dayExpanded = true },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray), // Gris más fuerte
+                shape = RectangleShape, // Forma rectangular
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(if (selectedDay.isEmpty()) "Seleccionar día" else selectedDay)
+                Icon(Icons.Filled.ArrowDropDown, contentDescription = null, tint = Color.White)
             }
             DropdownMenu(
                 expanded = dayExpanded,
@@ -86,8 +95,14 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
         Box(modifier = Modifier
             .fillMaxWidth(0.9f) // Ancho al 90%
             .padding(bottom = 32.dp)) {
-            Button(onClick = { hourExpanded = true }, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { hourExpanded = true },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray), // Gris más fuerte
+                shape = RectangleShape, // Forma rectangular
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(if (selectedHour.isEmpty()) "Seleccionar hora" else selectedHour)
+                Icon(Icons.Filled.ArrowDropDown, contentDescription = null, tint = Color.White)
             }
             DropdownMenu(
                 expanded = hourExpanded,
@@ -120,13 +135,13 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
 
         // Action buttons
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(onClick = { onNavigate("mainScreen") }) {
-                Text("Cancelar")
-            }
-            Button(onClick = {
+            SmallButton(text = "Cancelar", onClick = { onNavigate("mainScreen") })
+            SmallButton(text = "Añadir", onClick = {
                 // Check if a class already exists for the selected day and hour
                 db.collection("classes")
                     .whereEqualTo("day", selectedDay)
@@ -158,10 +173,31 @@ fun AddClassScreenUI(onNavigate: (String) -> Unit) {
                     .addOnFailureListener { e ->
                         errorMessage = "Error al comprobar la clase: ${e.message}"
                     }
-            }) {
-                Text("Añadir")
-            }
+            })
         }
+    }
+}
+
+@Composable
+fun SmallButton(
+    text: String,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Gray), // Gris más fuerte
+        shape = RectangleShape, // Forma rectangular
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 8.dp, // Elevación moderada
+            pressedElevation = 2.dp, // Elevación al presionar
+            hoveredElevation = 12.dp // Elevación al pasar el cursor (en escritorio)
+        ),
+        modifier = Modifier
+            .width(150.dp) // Ancho fijo
+            .height(48.dp) // Altura de los botones
+            .padding(vertical = 8.dp) // Espaciado entre botones
+    ) {
+        Text(text = text, color = Color.White)
     }
 }
 
