@@ -48,11 +48,27 @@ fun CurrentClassScreenUI() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .padding(16.dp),
+            .background(Color(0xFFF5F5F5)) // Fondo gris claro
+            .padding(0.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        // Encabezado azul
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFF87CEEB)) // Azul cielo
+                .height(56.dp)
+        ) {
+            Text(
+                text = "Mi horario - ¿Qué toca ahora?",
+                color = Color.White,
+                fontSize = 20.sp,
+                modifier = Modifier.align(Alignment.CenterStart).padding(start = 16.dp) // Texto alineado a la izquierda
+            )
+        }
+        Spacer(modifier = Modifier.height(40.dp)) // Espaciado entre el encabezado y el primer campo
+
         Text(
             text = currentDate,
             color = Color.Black,
